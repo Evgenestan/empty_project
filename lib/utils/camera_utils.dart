@@ -1,13 +1,11 @@
 import 'package:camera/camera.dart';
 
 class CameraUtils {
-  Future<CameraController> getCameraController(
-      ResolutionPreset resolutionPreset,
-      CameraLensDirection cameraLensDirection) async {
+  static Future<CameraController> getCameraController() async {
     final cameras = await availableCameras();
     final camera = cameras
-        .firstWhere((camera) => camera.lensDirection == cameraLensDirection);
+        .firstWhere((camera) => camera.lensDirection == CameraLensDirection.back);
 
-    return CameraController(camera, resolutionPreset);
+    return CameraController(camera, ResolutionPreset.medium);
   }
 }

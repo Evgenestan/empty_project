@@ -19,16 +19,20 @@ class HomeScreen extends StatelessWidget {
           child: ElevatedButton(
             child: Text("Scan"),
             onPressed: () {
-              Navigator.push(
+              /*Navigator.push(
                   context,
                   MaterialPageRoute<void>(
                       builder: (_) => BlocProvider(
-                            create: (_) =>
-                                CameraBloc(cameraUtils: CameraUtils())
-                                  ..add(CameraInitialized()),
+                            create: (_) => CameraBloc(),
                             child: const CameraScreen(),
                           )
                   )
+              );*/
+              Navigator.push(
+                context,
+                MaterialPageRoute<void>(
+                  builder: (_) => const CameraScreen()
+                )
               );
             },
           ),

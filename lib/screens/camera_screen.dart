@@ -12,25 +12,34 @@ class CameraScreen extends StatefulWidget {
   State<CameraScreen> createState() => _CameraScreenState();
 }
 
-class _CameraScreenState extends State<CameraScreen> {
+class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver {
 
+  late final CameraBloc _cameraBloc;
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance?.addObserver(this);
+    _cameraBloc = CameraBloc();
+    _cameraBloc.add(CameraInitialized());
+  }
+
+  @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
-    final bloc = BlocProvider.of<CameraBloc>(context);
-
-    if (!bloc.isInitialized()) {
+    if (_cameraBloc.state != CameraReady) {
       return;
     }
 
-    if (state == AppLifecycleState.inactive)
-      bloc.add(CameraStopped());
-    else if (state == AppLifecycleState.resumed) {
-      bloc.add(CameraInitialized());
+    if (state == AppLifecycleState.paused) {
+      _cameraBloc.add(CameraStopped());
+    } else if (state == AppLifecycleState.resumed) {
+      _cameraBloc.add(CameraInitialized());
     }
   }
 
-
   @override
   Widget build(BuildContext context) => BlocConsumer<CameraBloc, CameraState>(
+    bloc: _cameraBloc,
       listener: (context, state) {
         if (state is CameraCaptureSuccess) {
           //move to documentation from QR
@@ -41,8 +50,7 @@ class _CameraScreenState extends State<CameraScreen> {
       },
       builder: (context, state) => Scaffold(
           body: state is CameraReady
-              ? CameraPreview(
-              BlocProvider.of<CameraBloc>(context).getController())
+              ? CameraPreview(state.controller!)
               : const Center(
               child: CircularProgressIndicator()
           )
