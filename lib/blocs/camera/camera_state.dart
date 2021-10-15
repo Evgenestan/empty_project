@@ -16,6 +16,9 @@ class CameraReady extends CameraState {
   const CameraReady(this.controller);
 
   final CameraController? controller;
+
+  @override
+  List<Object> get props => [controller!];
 }
 
 class CameraFailure extends CameraState {
@@ -27,12 +30,16 @@ class CameraFailure extends CameraState {
   List<Object> get props => [error];
 }
 
-class CameraCaptureInProgress extends CameraState {}
+class CameraCaptureInProgress extends CameraState {
+  CameraCaptureInProgress();
+
+  XFile? file = null;
+}
 
 class CameraCaptureSuccess extends CameraState {
-  const CameraCaptureSuccess(this.path);
+  const CameraCaptureSuccess(this.url);
 
-  final String path;
+  final String url;
 }
 
 class CameraCaptureFailure extends CameraState {
