@@ -4,6 +4,7 @@ import 'package:camera/camera.dart';
 import 'package:empty_project/blocs/camera/camera_bloc.dart';
 import 'package:empty_project/blocs/camera/camera_event.dart';
 import 'package:empty_project/blocs/camera/camera_state.dart';
+import 'package:empty_project/utils/snackbar_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -55,7 +56,7 @@ class _CameraScreenState extends State<CameraScreen> with WidgetsBindingObserver
           _cameraController = state.controller!;
           _timer = Timer.periodic(const Duration(milliseconds: 1000), (Timer t) => getImage(_cameraController));
         } else if (state is CameraCaptureFailure) {
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(state.error)));
+          SnackBarUtils.showSnackBar(state.error, context);
         }
       },
       builder: (context, state) => Scaffold(
