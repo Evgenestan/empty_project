@@ -13,12 +13,6 @@ abstract class CameraState extends Equatable {
 class CameraInitial extends CameraState {}
 
 class CameraReady extends CameraState {
-  const CameraReady(this.controller);
-
-  final CameraController? controller;
-
-  @override
-  List<Object> get props => [controller!];
 }
 
 class CameraFailure extends CameraState {

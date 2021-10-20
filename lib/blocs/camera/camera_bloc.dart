@@ -8,9 +8,6 @@ import '../../utils/camera_utils.dart';
 class CameraBloc extends Bloc<CameraEvent, CameraState> {
   CameraBloc() : super(CameraInitial());
 
-  CameraController? _controller;
-
-  bool isInitialized() => _controller?.value.isInitialized ?? false;
 
   @override
   Stream<CameraState> mapEventToState(CameraEvent event) async* {
@@ -25,11 +22,8 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
 
   Stream<CameraState> _mapCameraInitializedToState(CameraInitialized event) async* {
     try {
-      _controller = await CameraUtils.getCameraController();
-      await _controller!.initialize();
-      yield CameraReady(_controller);
+      yield CameraReady();
     } on CameraException catch (error) {
-      _controller?.dispose();
       yield CameraFailure(error: error.description!);
     } catch (error) {
       yield CameraFailure(error: error.toString());
@@ -48,7 +42,6 @@ class CameraBloc extends Bloc<CameraEvent, CameraState> {
   }
 
   Stream<CameraState> _mapCameraStoppedToState(CameraStopped event) async* {
-    _controller?.dispose();
     yield CameraInitial();
   }
 }

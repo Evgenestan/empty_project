@@ -1,9 +1,5 @@
-import 'package:empty_project/blocs/camera/camera_bloc.dart';
-import 'package:empty_project/blocs/camera/camera_event.dart';
 import 'package:empty_project/screens/camera_screen.dart';
-import 'package:empty_project/utils/camera_utils.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({Key? key}) : super(key: key);
@@ -17,7 +13,7 @@ class HomeScreen extends StatelessWidget {
         ),
         body: Center(
           child: ElevatedButton(
-            child: Text("Scan"),
+            child: const Text("Scan"),
             onPressed: () {
               /*Navigator.push(
                   context,

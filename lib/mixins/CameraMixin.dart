@@ -1,29 +1,52 @@
+import 'dart:async';
 import 'package:camera/camera.dart';
-import 'package:empty_project/blocs/camera/camera_state.dart';
+import 'package:empty_project/utils/camera_utils.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../blocs/camera/camera_bloc.dart';
+mixin CameraMixin<T extends StatefulWidget>  on State<T> implements WidgetsBindingObserver {
 
-mixin CameraMixin<T extends StatefulWidget> on State<T> {
-
-  //late final CameraController? _cameraController;
+  @protected
+  abstract CameraController? cameraController;
 
   @override
   void initState() {
     super.initState();
-    // if (T is CameraReady) {
-    //   _cameraController = (T as CameraReady).controller;
-    // }
+    initCameraController();
   }
 
-  Future<void> getImage(CameraController controller) async => onImage(await controller.takePicture());
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.inactive) {
+      endImageStream();
+    } else if (state == AppLifecycleState.resumed) {
+      startImageStream();
+    }
+  }
+
+  Future<void> initCameraController() async {
+    cameraController = await CameraUtils.getCameraController();
+    await cameraController?.initialize();
+    if (mounted) {
+      setState(() {
+
+      });
+    }
+    startImageStream();
+  }
+
+  void startImageStream() {
+    cameraController?.startImageStream((image) => onImage(image));
+  }
+
+  void endImageStream() {
+    cameraController?.stopImageStream();
+  }
+
+  void onImage(CameraImage image);
 
   @override
   void dispose() {
-    //_cameraController?.dispose();
+    endImageStream();
     super.dispose();
   }
-
-  void onImage(XFile file);
 }
